@@ -1,0 +1,22 @@
+name: Continuos Integration
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  continuos-integration:
+    runs-on: ubuntu-latest
+    name: Tests
+    steps:
+      - name: Project repository
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.x
+      - name: Run Tests
+        run: |
+          npm install
+          npm run dev
+          npm run test
