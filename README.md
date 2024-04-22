@@ -1,4 +1,4 @@
-# Repositório do projeto account-contro!
+# Repositório do projeto account-control!
 
 <details>
   <summary><strong>Para desenvolver</strong></summary><br />
@@ -114,6 +114,9 @@
 ## 1 - Crie o endpoint GET `/users`
 
 <details>
+<summary>Especificações:</summary><br />
+
+<details>
   <summary>A requisição deve retornar o <code>status 200</code> e um array com todas usuários cadastradas. Exemplo: </summary><br />
 
 ```json
@@ -162,9 +165,12 @@
   ```
 </details>
 
+</details>
 
 ## 2 - Crie o endpoint GET `/users/:id`
 
+<details>
+ <summary>Especificações:</summary><br />
 <details>
   <summary>A requisição deve retornar o <code>status 200</code> e um usuário com base no <code>id</code> da rota. Por exemplo, ao fazer uma requisição <code>/users/5</code>, a resposta deve ser:</summary><br />
 
@@ -198,15 +204,19 @@
   ```
 </details>
 
+</details>
+
 ## 3 - Crie o endpoint POST `/login` e suas validações.
 
-O endpoint deverá receber no corpo da requisição os campos `email` e `password`.
-
-Deverá ocorrer uma validação se a senha e email estão corretos de acordo com os usuários já cadastrados.
-
-Os campos recebidos pela requisição devem ser validados e, caso os valores sejam inválidos, o endpoint deve retornar o código de `status 400` com a respectiva mensagem de erro.
-
 <details>
+  <summary>Especificações:</summary><br />
+<details>
+  O endpoint deverá receber no corpo da requisição os campos `email` e `password`.
+
+  Deverá ocorrer uma validação se a senha e email estão corretos de acordo com os usuários já cadastrados.
+
+  Os campos recebidos pela requisição devem ser validados e, caso os valores sejam inválidos, o endpoint deve retornar o código de `status 400` com a respectiva mensagem de erro.
+
   <summary>As regras de validação são:</summary><br />
 
   - o campo `email` é obrigatório;
@@ -228,7 +238,7 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
 </details>
   
 <details>
-  <summary>Os seguintes pontos serão avaliados:</summary><br />
+  <summary>Validações:</summary><br />
 
  - Caso o campo `email` não seja passado ou esteja vazio, retorne um código de `status 400` com o seguinte corpo:
 
@@ -280,12 +290,15 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
   
 </details>
 
+</details>
+
 ## 4 - Crie o endpoint POST `/users`
 
 <details>
-  <summary>Os seguintes pontos serão avaliados:</summary><br />
+  <summary>Especificações:</summary><br />
 
-- O endpoint deve ser capaz de adicionar um novo usuário ao seu arquivo;
+<details>
+<summary>O endpoint deve ser capaz de adicionar um novo usuário ao seu arquivo:</summary><br />
 
 - O corpo da requisição deverá ter o seguinte formato:
 
@@ -301,7 +314,11 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
     },
   }
   ```
+  </details>
 
+  <details>
+
+  <summary>Validações:</summary><br />
 - O campo `name` deverá ter no mínimo 3 caracteres. Ele é obrigatório.
 
   - Caso o campo não seja passado ou esteja vazio retorne um código de `status 400`, com o seguinte corpo:
@@ -342,13 +359,13 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
 
   - O campo `info` é obrigatório.
 
-      - Caso o campo não seja informado retorne `status 400`, com o seguinte corpo:
+    - Caso o campo não seja informado retorne `status 400`, com o seguinte corpo:
 
-        ```json
-        {
-          "message": "O campo \"info\" é obrigatório"
-        }
-        ```
+      ```json
+      {
+        "message": "O campo \"info\" é obrigatório"
+      }
+      ```
       
   - A chave `phoneNumber` é obrigatória.  
 
@@ -369,8 +386,11 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
         "message": "O campo \"city\" é obrigatório"
       }
       ```
-  
-- Caso esteja tudo certo, retorne o `status 201`  e o usuário cadastrado.
+    </details>
+
+  <details>
+
+  <summary>Caso esteja tudo certo, retorne o `status 201` e o usuário cadastrado:</summary><br />
   
 - O endpoint deve retornar o `status 201` e o usuário que foi cadastrado, Ex:
 
@@ -389,14 +409,16 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
   ```
 
 </details>
+</details>
 
 
 ## 5 - Crie o endpoint PUT `/users/:id`
 
 <details>
-  <summary>Os seguintes pontos serão avaliados:</summary><br />
+  <summary>Especificações:</summary><br />
 
-  - O endpoint deve ser capaz de editar um usuário com base no id da rota, sem alterar o id registrado.
+  <details>
+  <summary>O endpoint deve ser capaz de editar um usuário com base no id da rota, sem alterar o id registrado.:</summary><br />
 
   - O corpo da requisição deverá ter o seguinte formato:
 
@@ -412,6 +434,10 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
       },
     }
     ```
+    </details>
+
+    <details>
+     <summary>Validações:</summary><br />
 
   - O campo `name` deverá ter no mínimo 3 caracteres. Ele é obrigatório.
 
@@ -480,7 +506,11 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
           "message": "O campo \"city\" é obrigatório"
         }
         ```
-  - Caso esteja tudo certo, retorne o `status 200` e a usuário editada.
+    </details>
+
+    <details>
+     <summary> Caso esteja tudo certo, retorne o usuário editada:</summary><br />
+    
     - O endpoint deve retornar o `status 200` e o usuário que foi editado, Ex:
 
       ```json
@@ -498,6 +528,7 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
       ```
      
      - Os dados atualizados por meio do endpoint deve ser persistidos no arquivo `users.json`.
+     </details>
 
 </details>
 
@@ -505,7 +536,7 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
 ## 6 - Crie o endpoint DELETE `/users/:id`
 
 <details>
-  <summary>Os seguintes pontos serão avaliados:</summary><br />
+  <summary>Especificações:</summary><br />
 
   - O endpoint deve deletar um usuário com base no id da rota. Devendo retornar o `status 204`, sem conteúdo na resposta.
 
@@ -514,7 +545,7 @@ Os campos recebidos pela requisição devem ser validados e, caso os valores sej
 ## 7 - Crie o endpoint GET `/users/search?q=searchTerm`
 
 <details>
-  <summary>Os seguintes pontos serão avaliados:</summary><br />
+  <summary>Especificações:</summary><br />
 
   - O endpoint deve retornar um array de usuários que contenham em seu nome o termo pesquisado no queryParam da URL. Devendo retornar o `status 200`, com o seguinte corpo:
 
