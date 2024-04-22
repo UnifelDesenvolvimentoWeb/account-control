@@ -1,7 +1,7 @@
 # Repositório do projeto account-control!
 
 <details>
-  <summary><strong>Para desenvolver</strong></summary><br />
+  <summary><strong>Aplicação</strong></summary><br />
 
   Uma aplicação de cadastro usuarios em que será possível cadastrar, visualizar, pesquisar, editar e excluir informações. Para isso você deverá:
   1. Desenvolver uma API de um `CRUD` (**C**reate, **R**ead, **U**pdate e **D**elete);
