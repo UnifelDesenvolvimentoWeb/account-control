@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const {validEmail, validPassword} = require('./middlewares');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -24,6 +25,7 @@ app.get('/users', async (_req, res,) => {
 })
 
 app.get('/users/:id', async (req, res) => {
+
 	let {id} = req.params;
 
 	let usersPath = path.join(CWD, '/src/users.json');
@@ -38,3 +40,22 @@ app.get('/users/:id', async (req, res) => {
 		res.status(404).json({message:'Usuário não encontrado'});
 	}
 })
+
+app.post('/login',validEmail, validPassword, async (req, res) => {
+	
+	let {email, password} = req.body;
+
+	let usersPath = path.join(CWD, '/src/users.json')
+	let users = await fs.readFile(usersPath, 'UTF-8');
+	users = JSON.parse(users);
+
+	let user = users.find(user => user.email === email && user.password === password);
+	
+	if(user !== undefined) {
+		res.status(200).json({message: "Login realizado com sucesso"})
+	}
+	else {
+		res.status(401).json({message: "Email ou senha incorretos"})
+	}
+})
+
