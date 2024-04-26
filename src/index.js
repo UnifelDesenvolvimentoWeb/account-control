@@ -24,6 +24,18 @@ app.get('/users', async (_req, res,) => {
 	res.status(200).json(users)
 })
 
+app.get('/users/search', async (req, res) => {
+	const searchTerm = req.query.q;
+
+	let usersPath = path.join(CWD, '/src/users.json')
+	let users = await fs.readFile(usersPath, 'UTF-8');
+	users = JSON.parse(users)
+
+	let searchUsers = users.filter(user => user.name.includes(searchTerm)) || [];
+
+	res.status(200).json(searchUsers);
+})
+
 app.get('/users/:id', async (req, res) => {
 
 	let {id} = req.params;
@@ -103,3 +115,24 @@ app.put('/users/:id', validName, validEmail,validAge, validInfo, async (req, res
 
 
 })
+
+app.delete('/users/:id', async (req, res) => {
+
+	let {id} = req.params;
+
+	let usersPath = path.join(CWD, '/src/users.json');
+	let users = await fs.readFile(usersPath, 'UTF-8');
+	users = JSON.parse(users);
+
+	let updatedUsers = users.filter(user => user.id !== +id);
+
+	if(updatedUsers === users) {
+		res.status(204).end();
+	}
+	else {
+		await fs.writeFile(usersPath, JSON.stringify(updatedUsers));
+		res.status(204).end();
+	}
+
+})
+
