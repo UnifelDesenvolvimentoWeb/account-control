@@ -23,3 +23,18 @@ app.get('/users', async (_req, res,) => {
 	res.status(200).json(users)
 })
 
+app.get('/users/:id', async (req, res) => {
+	let {id} = req.params;
+
+	let usersPath = path.join(CWD, '/src/users.json');
+	let user = await fs.readFile(usersPath, 'UTF-8');
+	user = JSON.parse(user);
+	user = user.filter((element) => element.id === +id);
+
+	if(user[0]) {
+		res.status(200).json(user[0]);
+	}
+	else {
+		res.status(404).json({message:'Usuário não encontrado'});
+	}
+})
