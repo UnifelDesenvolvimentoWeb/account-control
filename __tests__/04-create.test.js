@@ -45,13 +45,6 @@ describe('4 - Crie o endpoint POST /users', () => {
       })
       .then(() => {
         return frisby
-          .setup({
-            request: {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          })
           .post(`${url}/users`, {
             age: 26,
             email: "email@email.com",
@@ -76,13 +69,6 @@ describe('4 - Crie o endpoint POST /users', () => {
       })
       .then(() => {
         return frisby
-          .setup({
-            request: {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          })
           .post(`${url}/users`, {
             name: 'Ma',
             age: 26,
@@ -161,13 +147,6 @@ describe('4 - Crie o endpoint POST /users', () => {
       })
       .then(() => {
         return frisby
-          .setup({
-            request: {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          })
           .post(`${url}/users`, {
             name: 'Maria Cardoso',
             email: "email@email.com",
@@ -194,13 +173,6 @@ describe('4 - Crie o endpoint POST /users', () => {
       })
       .then(() => {
         return frisby
-          .setup({
-            request: {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          })
           .post(`${url}/users`, {
             name: 'Maria Cardoso',
             age: 24,
@@ -228,13 +200,6 @@ describe('4 - Crie o endpoint POST /users', () => {
       })
       .then(() => {
         return frisby
-          .setup({
-            request: {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          })
           .post(`${url}/users`, {
             name: 'Maria Cardoso',
             age: 26,
@@ -262,13 +227,6 @@ describe('4 - Crie o endpoint POST /users', () => {
       })
       .then(() => {
         return frisby
-          .setup({
-            request: {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          })
           .post(`${url}/users`, {
             name: 'Maria Cardoso',
             age: 26,
