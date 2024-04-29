@@ -4,7 +4,7 @@ const fs = require('fs').promises
 const path = require('path');
 const { request } = require('http');
 const route = path.resolve(__dirname, './users.json')
-const {validateEmail, validatePassword} = require('./middlewares')
+const {validateEmail, validatePassword, validateName, validateAge, validateInfo} = require('./middlewares')
 
 const app = express();
 app.use(bodyParser.json());
@@ -39,6 +39,18 @@ app.post('/login', validateEmail, validatePassword, async (request, response)=>{
     return response.status(401).json({"message": "Email ou senha incorretos"})
   }
   response.status(200).json({"message": "Login realizado com sucesso"})
+})
+
+app.post('/users', validateName, validateAge, validateInfo, async (request, response)=> {
+  let users = await fs.readFile(route, 'utf-8')
+  users = JSON.parse(users)
+  let newUser = request.body
+  let id = users.length + 1
+  newUser.id = id
+  users.push(newUser)
+
+  fs.writeFile(route, JSON.stringify(users))
+  response.status(201).json(newUser)
 })
 
 app.listen('3001', () => {
