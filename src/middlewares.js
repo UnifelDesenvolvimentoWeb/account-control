@@ -62,11 +62,13 @@ function validateInfo (req, res, next) {
         return res.status(400).json({"message": "O campo \"info\" é obrigatório"})
     }
 
-    if (!info.city) {
+    const { city, phoneNumber} = info
+
+    if (!city) {
         return res.status(400).json({"message": "O campo \"city\" é obrigatório"})
     }
 
-    if (!info.phoneNumber) {
+    if (!phoneNumber) {
         return res.status(400).json({"message": "O campo \"phoneNumber\" é obrigatório"})
     }
     
