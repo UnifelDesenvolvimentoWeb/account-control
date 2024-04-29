@@ -75,6 +75,22 @@ app.put('/users/:id', validateName, validateAge, validateInfo, async (request, r
   response.status(200).json(user)
 })
 
+app.delete('/users/:id', async (request, response) => {
+
+	let {id} = request.params
+	let dataUsers = await fs.readFile(route, 'UTF-8')
+	let users = JSON.parse(dataUsers)
+  
+  const index = users.findIndex((user)=> user.id === Number(id))
+	
+  if (index === -1) {
+    return response.status(404).json({ "message": "Usuário não encontrado" })
+  }
+  users.splice(index, 1)
+  await fs.writeFile(route, JSON.stringify(users))
+  response.status(204).end()
+})
+
 app.listen('3001', () => {
   console.log('Online');
 });
