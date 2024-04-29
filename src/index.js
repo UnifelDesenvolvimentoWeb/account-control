@@ -2,10 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises
 const path = require('path');
-const { request } = require('http');
 const route = path.resolve(__dirname, './users.json')
 const {validateEmail, validatePassword, validateName, validateAge, validateInfo} = require('./middlewares');
-const { log } = require('console');
 
 const app = express();
 app.use(bodyParser.json());
