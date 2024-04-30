@@ -18,7 +18,7 @@ function validatePassword(req, res, next) {
     if (!password) {
         return res.status(400).json({message: 'O campo \"password\" é obrigatório'})
     }
-    if (password < 8) {
+    if (password.length < 8) {
         return res.status(400).json({message: 'O \"password\" deve ter pelo menos 8 caracteres'})
     }
 

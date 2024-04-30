@@ -41,9 +41,9 @@ app.post('/login', validateEmail, validatePassword, async (req, res) => {
   const users = await fs.readFile(route, 'UTF-8');
   const updUsers = JSON.parse(users)
 
-  const login = updUsers.find((user) => user.email === email && user.password === +password);
+  const login = updUsers.find((user) => user.email === email && user.password == password);
   if (!login) {
-    return res.status(404).json({message: 'Email ou senha incorretos'})
+    return res.status(401).json({message: 'Email ou senha incorretos'})
   }
 
    return res.status(200).json({message: 'Login realizado com sucesso'})
