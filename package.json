@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest --runInBand",
     "restore": "cp __tests__/seed.json src/users.json",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js --ignore 'src/users.json'"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js --ignore 'src/users.json'"
   },
   "keywords": [],
   "author": "",
