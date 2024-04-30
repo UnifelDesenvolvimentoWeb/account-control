@@ -12,6 +12,19 @@ app.get('/', (_request, response) => {
   response.status(200).send();
 });
 
+app.get('/users/search', async (request, response)=> {
+  const searchTerm = request.query.q
+  const dataUsers = await fs.readFile(route, 'UTF-8')
+  const users = JSON.parse(dataUsers)
+
+  if (!searchTerm || searchTerm == '') {
+    return response.status(200).json(users)
+  }
+
+  const user = users.filter((user)=> user.name.includes(searchTerm))
+  response.status(200).json(user)
+})
+
 app.get('/users', async (_request, response)=> {
   const users = await fs.readFile(route, 'utf-8')
   response.status(200).send(JSON.parse(users))
@@ -76,7 +89,7 @@ app.put('/users/:id', validateName, validateAge, validateInfo, async (request, r
 app.delete('/users/:id', async (request, response) => {
 
 	let {id} = request.params
-	let dataUsers = await fs.readFile(route, 'UTF-8')
+	const dataUsers = await fs.readFile(route, 'UTF-8')
 	let users = JSON.parse(dataUsers)
   
   const index = users.findIndex((user)=> user.id === Number(id))
