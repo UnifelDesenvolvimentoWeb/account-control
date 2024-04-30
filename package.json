@@ -1,7 +1,7 @@
 {
   "name": "account-control",
   "version": "1.0.0",
-  "description": "",
+  "description": "<details>\r   <summary><strong>Aplicação</strong></summary><br />",
   "main": "src/index.js",
   "scripts": {
     "test": "jest --runInBand",
