@@ -1,3 +1,15 @@
+function validateName(req, res, next) {
+    const { name } = req.body
+
+    if (!name) {
+        return res.status(400).json({message: 'O campo \"name\" é obrigatório'})
+    }
+    if (name.length < 3) {
+        return res.status(400).json({message: 'O \"name\" deve ter pelo menos 3 caracteres'})
+    }
+    next()
+}
+
 function validateEmail(req, res, next) {
     const { email } = req.body
     const regex = /^\S+@\S+\.\S+$/;
@@ -25,4 +37,32 @@ function validatePassword(req, res, next) {
     next()
 }
 
-module.exports = {validateEmail, validatePassword}
+function validateAge(req, res, next) {
+    const { age } = req.body
+
+    if (!age) {
+        return res.status(400).json({message: 'O campo \"age\" é obrigatório'})
+    }
+    if (age < 18) {
+        return res.status(400).json({message: 'O usuário deve ser maior de idade'})
+    }
+    next()
+}
+
+function validateInfo(req, res, next) {
+    const { info } = req.body
+
+    if (!info) {
+        return res.status(400).json({message: 'O campo \"info\" é obrigatório'})
+    }
+    if (!info.phoneNumber) {
+        return res.status(400).json({message: 'O campo \"phoneNumber\" é obrigatório'})
+    }
+    if (!info.city) {
+        return res.status(400).json({message: 'O campo \"city\" é obrigatório'})
+    }
+
+    next()
+}
+
+module.exports = { validateName, validateEmail, validatePassword, validateAge, validateInfo }

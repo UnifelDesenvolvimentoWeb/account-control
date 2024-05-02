@@ -1,11 +1,11 @@
 const express = require('express');
-const { validateEmail, validatePassword } = require('./middlewares')
+const { validateName, validateEmail, validatePassword, validateAge, validateInfo } = require('./middlewares')
 const fs = require('fs').promises
 const path = require('path');
 const bodyParser = require ('body-parser');
 
 const app = express();
-const route = path.resolve('./src/users.json');
+const route = path.resolve ('./src/users.json');
 app.use(bodyParser.json());
 app.use(express.json())
 
@@ -47,6 +47,27 @@ app.post('/login', validateEmail, validatePassword, async (req, res) => {
   }
 
    return res.status(200).json({message: 'Login realizado com sucesso'})
+})
+
+//requisito 04
+app.post('/users', validateName, validateEmail, validatePassword, 
+validateAge, validateInfo, async(req, res) => {
+  const { name, email, password, age, info } = req.body
+  const users = await fs.readFile(route, 'UTF-8');
+  const updUsers = JSON.parse(users)
+
+ const dateUser = {
+  id: updUsers[updUsers.length -1].id + 1,
+  name, 
+  email, 
+  password, 
+  age, 
+  info}
+    
+  updUsers.push(dateUser)
+  fs.writeFile(route, JSON.stringify(dateUser))
+  return res.status(201).json(dateUser)
+
 })
 
 module.exports = app;
