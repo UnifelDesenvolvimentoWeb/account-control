@@ -2,7 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const path = require('path');
-const { validateLogin, validateCreateUser } = require('./middleware');
+const {
+  validateLogin,
+  validateCreateUser,
+  validateUserInput,
+} = require('./middleware');
 
 const app = express();
 
@@ -91,6 +95,42 @@ app.post('/users', validateCreateUser, async (req, res) => {
     await fs.writeFile(route, JSON.stringify(users, null, 2));
 
     return res.status(201).json(newUser);
+  } catch (error) {
+    return res.status(500).json({ error: 'Erro ao processar a requisição' });
+  }
+});
+
+// Endpoint para editar um usuário existente
+app.put('/users/:id', validateUserInput, async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { name, email, password, age, info } = req.body;
+
+  if (isNaN(userId)) {
+    return res
+      .status(400)
+      .json({ message: 'O ID do usuário deve ser um número válido' });
+  }
+
+  try {
+    const users = await readUsersData();
+    const userIndex = users.findIndex((user) => user.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    users[userIndex] = {
+      ...users[userIndex],
+      name,
+      email,
+      password,
+      age,
+      info,
+    };
+
+    await fs.writeFile(route, JSON.stringify(users, null, 2));
+
+    return res.status(200).json(users[userIndex]);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao processar a requisição' });
   }

@@ -103,16 +103,5 @@
       "registrationDate": "2023-11-18T21:45:27.665Z",
       "lastAccess": "2024-04-20T14:33:23.665Z"
     }
-  },
-  {
-    "id": 8,
-    "name": "Jean Wilker",
-    "email": "Jean.Wilker@example.com",
-    "password": "12345678",
-    "age": 33,
-    "info": {
-      "city": "Salvador",
-      "phoneNumber": "(71) 73285-0285"
-    }
   }
 ]
