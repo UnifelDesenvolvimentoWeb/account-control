@@ -58,11 +58,7 @@ validateAge, validateInfo, async(req, res) => {
 
  const dateUser = {
   id: updUsers[updUsers.length -1].id + 1,
-  name, 
-  email, 
-  password, 
-  age, 
-  info}
+  name, email, password, age, info}
     
   updUsers.push(dateUser)
   fs.writeFile(route, JSON.stringify(dateUser))
