@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const path = require('path');
-const { validateLogin } = require('./middleware');
+const { validateLogin, validateCreateUser } = require('./middleware');
 
 const app = express();
 
@@ -10,8 +10,8 @@ const route = path.resolve(__dirname, '../src/users.json');
 
 app.use(bodyParser.json());
 
-app.get('/', (_request, response) => {
-  response.status(200).send();
+app.get('/', (_req, res) => {
+  res.status(200).send();
 });
 
 async function readUsersData() {
@@ -19,42 +19,42 @@ async function readUsersData() {
   return JSON.parse(usersData);
 }
 
-// Rota para obter todos os usuários
-app.get('/users', async (_request, response) => {
+// Endpoint para obter todos os usuários
+app.get('/users', async (_req, res) => {
   try {
     const users = await readUsersData();
 
     if (users.length === 0) {
-      response.status(200).json([]);
+      res.status(200).json([]);
     } else {
-      response.status(200).json(users);
+      res.status(200).json(users);
     }
   } catch (error) {
-    response.status(500).json({ error: 'Erro ao processar a requisição' });
+    res.status(500).json({ error: 'Erro ao processar a requisição' });
   }
 });
 
-// Rota para obter um usuário específico
-app.get('/users/:id', async (request, response) => {
+// Endpoint para obter um usuário específico
+app.get('/users/:id', async (req, res) => {
   try {
     const users = await readUsersData();
-    const userId = parseInt(request.params.id);
+    const userId = parseInt(req.params.id);
 
     const user = users.find((user) => user.id === userId);
 
     if (!user) {
-      response.status(404).json({ message: 'Usuário não encontrado' });
+      res.status(404).json({ message: 'Usuário não encontrado' });
     } else {
-      response.status(200).json(user);
+      res.status(200).json(user);
     }
   } catch (error) {
-    response.status(500).json({ error: 'Erro ao processar a requisição' });
+    res.status(500).json({ error: 'Erro ao processar a requisição' });
   }
 });
 
-// Rota para validar login
-app.post('/login', validateLogin, async (request, response) => {
-  const { email, password } = request.body;
+// Endpoint para para validar login
+app.post('/login', validateLogin, async (req, res) => {
+  const { email, password } = req.body;
 
   try {
     const users = await readUsersData();
@@ -63,18 +63,36 @@ app.post('/login', validateLogin, async (request, response) => {
     );
 
     if (!user) {
-      return response
-        .status(401)
-        .json({ message: 'Email ou senha incorretos' });
+      return res.status(401).json({ message: 'Email ou senha incorretos' });
     }
 
-    return response
-      .status(200)
-      .json({ message: 'Login realizado com sucesso' });
+    return res.status(200).json({ message: 'Login realizado com sucesso' });
   } catch (error) {
-    return response
-      .status(500)
-      .json({ error: 'Erro ao processar a requisição' });
+    return res.status(500).json({ error: 'Erro ao processar a requisição' });
+  }
+});
+
+// Endpoint para adicionar um novo usuário
+app.post('/users', validateCreateUser, async (req, res) => {
+  const { name, email, password, age, info } = req.body;
+
+  try {
+    const users = await readUsersData();
+    const newUser = {
+      id: users.length + 1,
+      name,
+      email,
+      password,
+      age,
+      info,
+    };
+
+    users.push(newUser);
+    await fs.writeFile(route, JSON.stringify(users, null, 2));
+
+    return res.status(201).json(newUser);
+  } catch (error) {
+    return res.status(500).json({ error: 'Erro ao processar a requisição' });
   }
 });
 
