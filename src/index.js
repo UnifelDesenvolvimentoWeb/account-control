@@ -5,7 +5,7 @@ const path = require('path');
 const bodyParser = require ('body-parser');
 
 const app = express();
-const route = path.resolve ('./src/users.json');
+const route = path.resolve(__dirname, './users.json');
 app.use(bodyParser.json());
 app.use(express.json())
 
@@ -61,7 +61,7 @@ validateAge, validateInfo, async(req, res) => {
   name, email, password, age, info}
     
   updUsers.push(dateUser)
-  fs.writeFile(route, JSON.stringify(dateUser))
+  await fs.writeFile(route, JSON.stringify(updUsers))
   return res.status(201).json(dateUser)
 
 })
