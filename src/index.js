@@ -6,6 +6,8 @@ const path = require('path');
 
 const app = express();
 const CWD = process.env.PWD;
+const usersPath = path.join(CWD, '/src/users.json');
+
 app.use(bodyParser.json());
 
 app.get('/', (_request, response) => {
@@ -16,89 +18,67 @@ app.listen('3001', () => {
   console.log('Online');
 });
 
-app.get('/users', async (_req, res,) => {
+async function read() {
+	return JSON.parse(await fs.readFile(usersPath, 'UTF-8'));
+}
 
-	let usersPath = path.join(CWD, '/src/users.json')
-	let users = await fs.readFile(usersPath, 'UTF-8');
-	users = JSON.parse(users)
-	res.status(200).json(users)
+async function write(data) {
+	fs.writeFile(usersPath, JSON.stringify(data));
+}
+
+app.get('/users', async (_req, res,) => {
+	const users = await read();
+	res.status(200).json(users);
 })
 
 app.get('/users/search', async (req, res) => {
 	const searchTerm = req.query.q;
+	const users = await read();
 
-	let usersPath = path.join(CWD, '/src/users.json')
-	let users = await fs.readFile(usersPath, 'UTF-8');
-	users = JSON.parse(users)
-
-	let searchUsers = users.filter(user => user.name.includes(searchTerm)) || [];
-
+	let searchUsers = users.filter(user => user.name.includes(searchTerm));
 	res.status(200).json(searchUsers);
 })
 
 app.get('/users/:id', async (req, res) => {
+	const {id} = req.params;
+	const users = await read();
+	const user = users.find((element) => element.id === +id);
 
-	let {id} = req.params;
-
-	let usersPath = path.join(CWD, '/src/users.json');
-	let user = await fs.readFile(usersPath, 'UTF-8');
-	user = JSON.parse(user);
-	user = user.filter((element) => element.id === +id);
-
-	if(user[0]) {
-		res.status(200).json(user[0]);
+	if(!user) {
+		return res.status(404).json({message:'Usuário não encontrado'});
 	}
-	else {
-		res.status(404).json({message:'Usuário não encontrado'});
-	}
+
+	return res.status(200).json(user);
 })
 
 app.post('/login',validEmail, validPassword, async (req, res) => {
-	
-	let {email, password} = req.body;
+	const {email, password} = req.body;
+	const users = await read();
 
-	let usersPath = path.join(CWD, '/src/users.json');
-	let users = await fs.readFile(usersPath, 'UTF-8');
-	users = JSON.parse(users);
-
-	let user = users.find(user => user.email === email && user.password === password);
+	const user = users.find(user => user.email === email && user.password === password);
 	
-	if(user !== undefined) {
-		res.status(200).json({message: "Login realizado com sucesso"});
+	if(!user) {
+		return res.status(401).json({message: "Email ou senha incorretos"});
 	}
-	else {
-		res.status(401).json({message: "Email ou senha incorretos"});
-	}
+	return res.status(200).json({message: "Login realizado com sucesso"});
 })
 
 app.post('/users', validName, validEmail,validAge, validInfo, async (req, res) => {
-
 	let user = req.body;
+	let users = await read();
 
-	let usersPath = path.join(CWD, '/src/users.json');
-	let users = await fs.readFile(usersPath, 'UTF-8');
-	users = JSON.parse(users);
-
-	let id = users.length;
-	users.forEach(user => {
-		if(user.id === id) {id++};
-	})
-	user.id = id;
+	user.id = users.length + 1;
 	users.push(user)
 	
-	fs.writeFile(usersPath, JSON.stringify(users));
+	await write(users)
 	res.status(201).json(user);
 })
 
 app.put('/users/:id', validName, validEmail,validAge, validInfo, async (req, res) => {
-	
-	let {id} = req.params;
+	const users = await read();
+	const {id} = req.params;
+
 	let newUser = req.body;
-
-	let usersPath = path.join(CWD, '/src/users.json');
-	let users = await fs.readFile(usersPath, 'UTF-8');
-	users = JSON.parse(users);
-
 	newUser.id = +id;
 
 	let oldUser = users.find((element) => element.id === +id);
@@ -112,27 +92,19 @@ app.put('/users/:id', validName, validEmail,validAge, validInfo, async (req, res
 		await fs.writeFile(usersPath, JSON.stringify(users));
 		res.status(200).json(newUser);
 	}
-
-
 })
 
 app.delete('/users/:id', async (req, res) => {
+	const {id} = req.params;
+	const users = await read();
 
-	let {id} = req.params;
+	const updatedUsers = users.filter(user => user.id !== +id);
 
-	let usersPath = path.join(CWD, '/src/users.json');
-	let users = await fs.readFile(usersPath, 'UTF-8');
-	users = JSON.parse(users);
-
-	let updatedUsers = users.filter(user => user.id !== +id);
-
-	if(updatedUsers === users) {
+	if(updatedUsers.length === users.length) {
 		res.status(204).end();
 	}
 	else {
-		await fs.writeFile(usersPath, JSON.stringify(updatedUsers));
+		await write(updatedUsers);
 		res.status(204).end();
 	}
-
 })
-

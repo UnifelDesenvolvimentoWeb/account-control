@@ -3,11 +3,9 @@ function validEmail(req, res, next) {
     let regex = new RegExp('[\\w\\d\-\.\_]{1,256}[@]{1}[\\w\\d]{1,256}[.]{1}[\\w]{2,5}');
 
     if(!email) {
-        console.log('Empty')
         return res.status(400).json({message: "O campo \"email\" é obrigatório"});
     }
     else if(!regex.test(email)) {
-        console.log('Invalid Format')
         return res.status(400).json({message: "O \"email\" deve ter o formato \"email@email.com\""});
     }
 
