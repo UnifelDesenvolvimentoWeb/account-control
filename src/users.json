@@ -103,5 +103,16 @@
       "registrationDate": "2023-11-18T21:45:27.665Z",
       "lastAccess": "2024-04-20T14:33:23.665Z"
     }
+  },
+  {
+    "id": 8,
+    "name": "Maria Cardoso",
+    "email": "email@email.com",
+    "password": "12345678",
+    "age": 26,
+    "info": {
+      "phoneNumber": "(71) 7415-8562",
+      "city": "Salvador"
+    }
   }
 ]

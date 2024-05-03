@@ -106,4 +106,21 @@ function validateUserInput(req, res, next) {
   next();
 }
 
-module.exports = { validateLogin, validateCreateUser, validateUserInput };
+function validateUserId(req, res, next) {
+  const userId = parseInt(req.params.id);
+
+  if (isNaN(userId)) {
+    return res
+      .status(400)
+      .json({ message: 'O ID do usuário deve ser um número válido' });
+  }
+
+  next();
+}
+
+module.exports = {
+  validateLogin,
+  validateCreateUser,
+  validateUserInput,
+  validateUserId,
+};
