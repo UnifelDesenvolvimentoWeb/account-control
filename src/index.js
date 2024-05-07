@@ -89,7 +89,7 @@ app.put('/users/:id', validateName, validateAge, validateInfo, async (req, res) 
   return res.status(200).json( infoId )
 }) 
 
-//requisito 06 - feito
+//requisito 06
 app.delete('/users/:id', async (req, res) => {
   const users = await fs.readFile(route, 'UTF-8');
   const updUsers = JSON.parse(users)
