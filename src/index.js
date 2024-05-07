@@ -2,7 +2,7 @@ const express = require('express');
 const { validateName, validateEmail, validatePassword, validateAge, validateInfo } = require('./middlewares')
 const fs = require('fs').promises
 const path = require('path');
-const bodyParser = require ('body-parser');
+const bodyParser = require('body-parser');
 
 const app = express();
 const route = path.resolve(__dirname, './users.json');
@@ -63,6 +63,50 @@ validateAge, validateInfo, async(req, res) => {
   updUsers.push(dateUser)
   await fs.writeFile(route, JSON.stringify(updUsers))
   return res.status(201).json(dateUser)
+
+})
+
+//requisito 05
+app.put('/users/:id', validateName, validateAge, validateInfo, async (req, res) => {
+  const { id } = req.params
+  const { name, email, password, age, info} = req.body
+  const users = await fs.readFile(route, 'UTF-8');
+  const updUsers = JSON.parse(users)
+
+  const infoId = updUsers.find((user) => user.id == id)
+
+  if (!infoId) {
+    return res.status(404).json({ message: 'Usuário não encontrado'})
+  }
+
+  infoId.name = name;
+  infoId.email = email;
+  infoId.password = password;
+  infoId.age = age;
+  infoId.info = info;
+
+  await fs.writeFile(route, JSON.stringify(updUsers))
+  return res.status(200).json( infoId )
+}) 
+
+//requisito 06 - feito
+app.delete('/users/:id', async (req, res) => {
+  const users = await fs.readFile(route, 'UTF-8');
+  const updUsers = JSON.parse(users)
+
+  const { id } = req.params;
+  const index = updUsers.findIndex((user) => user.id === +id);
+  updUsers.splice(index, 1)
+
+  await fs.writeFile(route, JSON.stringify(updUsers))
+  return res.status(204).end()
+})
+
+//requisito 07
+app.get('/users/search?q=searchTerm', async (req, res) => {
+  const users = await fs.readFile(route, 'UTF-8');
+  const updUsers = JSON.parse(users)
+
 
 })
 
