@@ -6,7 +6,6 @@ const {
   validateLogin,
   validateCreateUser,
   validateUserInput,
-  validateUserId,
 } = require('./middlewares');
 
 const app = express();
@@ -34,6 +33,23 @@ app.get('/users', async (_req, res) => {
     } else {
       res.status(200).json(users);
     }
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao processar a requisição' });
+  }
+});
+
+// Endpoint para procurar por usuários
+app.get('/users/search', async (req, res) => {
+  try {
+    const searchUser = req.query.q;
+    const users = await readUsersData();
+
+    if (!searchUser || searchUser == '') {
+      return res.status(200).json(users);
+    }
+
+    const user = users.filter((user) => user.name.includes(searchUser));
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao processar a requisição' });
   }
@@ -138,28 +154,24 @@ app.put('/users/:id', validateUserInput, async (req, res) => {
 });
 
 // Endpoint para deletar um usuário existente
-app.delete('/users/:id', validateUserId, async (request, response) => {
-  const userId = parseInt(request.params.id);
+app.delete('/users/:id', async (req, res) => {
+  const userId = parseInt(req.params.id);
 
   try {
     const users = await readUsersData();
     const updatedUsers = users.filter((user) => user.id !== userId);
 
     if (updatedUsers.length === users.length) {
-      return response.status(404).json({ message: 'Usuário não encontrado' });
+      return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
     await fs.writeFile(route, JSON.stringify(updatedUsers, null, 2));
 
-    return response.status(204).send();
+    return res.status(204).send();
   } catch (error) {
-    return response
-      .status(500)
-      .json({ error: 'Erro ao processar a requisição' });
+    return res.status(500).json({ error: 'Erro ao processar a requisição' });
   }
 });
-
-
 
 app.listen('3001', () => {
   console.log('Online');

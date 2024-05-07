@@ -43,7 +43,6 @@ describe('7 - Crie o endpoint GET /users/search?q=searchTerm', () => {
           email: "marcelo.dourado@example.com",
           password: "12345678",
           age: 42,
-          password: '12345678',
           info: { phoneNumber: '(71) 7893-8562', city: 'Salvador' },
       })
       .expect('status', 201);
